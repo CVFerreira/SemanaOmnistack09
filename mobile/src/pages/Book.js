@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { SafeAreaView, Alert, StyleSheet, TextInput, TouchableOpacity, AsyncStorage, Text } from 'react-native';
 
 import api from '../services/api';
-import { listenerCount } from 'cluster';
 
 export default function Book({ navigation }){
     const id = navigation.getParam('id');

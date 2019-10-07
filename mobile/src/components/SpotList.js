@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { WithNavigation } from 'react-native';
-import { View, Text, StyleSheet, FlatList, Image,TouchableOpacity } from 'react-native';
+import { View, StyleSheet, FlatList, Text, AsyncStorage, Image, TouchableOpacity } from 'react-native';
 
 import api from '../services/api';
 
@@ -8,13 +8,14 @@ function SpotList({ tech, navigation }){
     const [spots, setSpots] = useState([]);
 
     useEffect(() => {
-        async function loadSpots(){
+        async function loadSpots() {
             const response = await api.get('/spots', {
                 params: { tech }
             })
 
             setSpots(response.data);
         }
+
         loadSpots();
     }, []);
 
@@ -22,15 +23,18 @@ function SpotList({ tech, navigation }){
         navigation.navigate('Book', { id });
     }
 
+    function logout() {
+        AsyncStorage.clear();
+        navigation.navigate('Login');
+    }
+
     return (
-        <View style={StyleSheet.container}>
-            <Text style={StyleSheet.title}>Epresas que usam <Text style={styles.bold}>{tech}</Text></Text>
-
-
-            <FlatList
-                style={styles.list}
+        <View style={styles.container}>
+            <Text style={styles.title}>Epresas que usam <Text style={styles.bold}>{tech}</Text></Text>
+            <Text>Teste</Text>
+            <FlatList style={styles.list}
                 date={spots}
-                keyExtractor={spot => spots._id}
+                keyExtractor={spot => spot._id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) =>  (
@@ -41,10 +45,14 @@ function SpotList({ tech, navigation }){
                         <TouchableOpacity onPress={() => handleNavigate(item._id)} style={styles.button}>
                             <Text style={styles.buttonText}>Solicitar reserva</Text>
                         </TouchableOpacity>
-                    </View>
-                    
-                )}
-            />
+                    </View>        
+                )}/>
+
+            <View> 
+                <TouchableOpacity onPress={logout} style={styles.buttonLogout} >
+                    <Text style={styles.buttonText}>Logout</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
@@ -58,7 +66,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#444',
         paddingHorizontal: 20,
-        marginBottom: 5,
+        marginBottom: 15,
     },
 
     bold: {
@@ -108,6 +116,13 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
 
-});
+    buttonLogout:{
+        height: 42,
+        backgroundColor: '#f05a5b',
+        justifyContent:'center',
+        alignItems: 'center',
+        borderRadius:2,
+    }
 
+});
 export default SpotList;

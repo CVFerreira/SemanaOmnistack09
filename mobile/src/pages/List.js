@@ -7,7 +7,7 @@ import logo from '../assets/logo.png';
 
 export default function List(){
     const [techs, setTechs] = useState([]);
-
+    
     useEffect(() =>{
         AsyncStorage.getItem('techs').then(storagedTechs => {
             const techsArray = storagedTechs.split(',').map(tech => tech.trim());
@@ -20,12 +20,11 @@ export default function List(){
         <SafeAreaView style={styles.container}>
             <Image style={styles.logo} source={logo}/>
             <ScrollView>
-                {techs.map (tech => <SpotList key={tech} tech={tech} />)}
+                {techs.map(tech => <SpotList key={tech} tech={tech}/>)}
             </ScrollView>
         </SafeAreaView>
     )  
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -36,6 +35,6 @@ const styles = StyleSheet.create({
         height: 32,
         resizeMode: "contain",
         alignSelf: 'center',
-        marginTop: 10,
+        marginTop: 40,
     },
 })
