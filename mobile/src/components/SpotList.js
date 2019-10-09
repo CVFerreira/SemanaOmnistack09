@@ -1,25 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { WithNavigation } from 'react-native';
-import { View, StyleSheet, FlatList, Text, AsyncStorage, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { withNavigation } from 'react-navigation'
+import { View, Text, StyleSheet, AsyncStorage, FlatList, TouchableOpacity, Image } from 'react-native'
 
-import api from '../services/api';
+import api from '../services/api'
 
-function SpotList({ tech, navigation }){
-    const [spots, setSpots] = useState([]);
-
+function SpotList({ tech, navigation }) {
+    const [spots, setSpots] = useState([])
+    
     useEffect(() => {
         async function loadSpots() {
             const response = await api.get('/spots', {
                 params: { tech }
             })
-
-            setSpots(response.data);
+            setSpots(response.data)
         }
 
         loadSpots();
-    }, []);
+    }, [])
 
-    function handleNavigate(id){
+    function handleNavigate(id) {
         navigation.navigate('Book', { id });
     }
 
@@ -30,29 +29,27 @@ function SpotList({ tech, navigation }){
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Epresas que usam <Text style={styles.bold}>{tech}</Text></Text>
-            <Text>Teste</Text>
-            <FlatList style={styles.list}
-                date={spots}
+            <Text style={styles.title}>Empresas que usam <Text style={styles.bold}>{tech}</Text></Text>
+            <TouchableOpacity onPress={() => logout()} style={styles.button}>
+                <Text style={styles.buttonText}>logout</Text>
+            </TouchableOpacity>
+            <FlatList
+                style={styles.list}
+                data={spots}
                 keyExtractor={spot => spot._id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) =>  (
+                renderItem={({ item }) => (
                     <View style={styles.listItem}>
-                        <Image style={styles.thumbnail} source={{ uri: item.thumbnail_url }}/>
+                        <Image style={styles.thumbnail} source={{ uri: item.thumbnail_url }} />
                         <Text style={styles.company}>{item.company}</Text>
                         <Text style={styles.price}>{item.price ? `R$${item.price}/dia` : 'GRATUITO'}</Text>
                         <TouchableOpacity onPress={() => handleNavigate(item._id)} style={styles.button}>
-                            <Text style={styles.buttonText}>Solicitar reserva</Text>
+                            <Text style={styles.buttonText}>Solicitar Reserva</Text>
                         </TouchableOpacity>
-                    </View>        
-                )}/>
-
-            <View> 
-                <TouchableOpacity onPress={logout} style={styles.buttonLogout} >
-                    <Text style={styles.buttonText}>Logout</Text>
-                </TouchableOpacity>
-            </View>
+                    </View>
+                )}
+            />
         </View>
     )
 }
@@ -61,7 +58,6 @@ const styles = StyleSheet.create({
     container: {
         marginTop: 30,
     },
-    
     title: {
         fontSize: 20,
         color: '#444',
@@ -70,59 +66,48 @@ const styles = StyleSheet.create({
     },
 
     bold: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
 
-    list:{
-        paddingHorizontal: 20
+    list: {
+        paddingHorizontal: 20,
     },
-
-    listItem:{
+    listItem: {
         marginRight: 15,
     },
 
-    thumbnail:{
+    thumbnail: {
         width: 200,
         height: 120,
         resizeMode: 'cover',
         borderRadius: 2,
     },
 
-    company:{
+    company: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
-        marginTop: 10,
-    },
-
-    price:{
-        fontSize: 15,
-        color: '#999',
         marginTop: 5,
+
     },
 
-    button:{
+    button: {
         height: 32,
         backgroundColor: '#f05a5b',
-        justifyContent:'center',
+        justifyContent: 'center',
         alignItems: 'center',
-        borderRadius:2,
+        borderRadius: 2,
         marginTop: 15,
+        marginBottom: 5,
     },
 
-    buttonText:{
-        color:'#fff',
+    buttonText: {
+        color: '#FFF',
         fontWeight: 'bold',
         fontSize: 15,
     },
 
-    buttonLogout:{
-        height: 42,
-        backgroundColor: '#f05a5b',
-        justifyContent:'center',
-        alignItems: 'center',
-        borderRadius:2,
-    }
 
-});
-export default SpotList;
+})
+
+export default withNavigation(SpotList)

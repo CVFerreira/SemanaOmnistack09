@@ -29,7 +29,7 @@ export default function Book({ navigation }){
                 <Text style={styles.label}>DATA DE INTERESSE *</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Qual data vocÊ quer reservar?"
+                    placeholder="Qual data você quer reservar?"
                     placeholderTextColor= "#999"
                     autoCapitalize="wors"
                     autoCorrect={false}
